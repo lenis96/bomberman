@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby -w
 require "socket"
 require_relative "Player"
+require_relative "Game"
 class Server
   def initialize( port, ip )
     @server = TCPServer.open( ip, port )
@@ -12,6 +13,7 @@ class Server
     @connections[:clients] = @clients
     @jugadores={1=>Player.new(1,0,0),2=>Player.new(2,500,0),3=>Player.new(3,0,500),4=>Player.new(4,500,500)}
     @numConnections=0
+    @game=nil
     run
 
   end
@@ -85,14 +87,13 @@ class Server
   }
   end
   def jugar()
-
+    @game=Game.new()
+    1.upto(4) do |i|
+      @game.setPlayer(i,@jugadores[i])
+    end
     Thread.new do
       while true do
-        #puts Time.now # or call tick function
-        @jugadores.each do|key,value|
-          value.update()
-          #puts("#{key} x:#{value.x} y:#{value.y}")
-        end
+        @game.update()
         sleep 0.05
       end
     end
