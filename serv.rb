@@ -3,8 +3,9 @@ require "socket"
 require_relative "Player"
 require_relative "Game"
 class Server
-  def initialize( port, ip )
+  def initialize( ip,port )
     @server = TCPServer.open( ip, port )
+    puts "Servidor corriendo en #{ip} en el puerto #{port}"
     @connections = Hash.new
     @rooms = Hash.new
     @clients = Hash.new
@@ -102,4 +103,4 @@ end
 
 
 
-Server.new( 3000, "192.168.250.37" )
+Server.new( Socket.ip_address_list[1].inspect_sockaddr,3000)
