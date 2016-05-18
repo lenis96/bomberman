@@ -12,7 +12,7 @@ class Server
     @connections[:server] = @server
     @connections[:rooms] = @rooms
     @connections[:clients] = @clients
-    @jugadores={1=>Player.new(1,0,0),2=>Player.new(2,500,0),3=>Player.new(3,0,500),4=>Player.new(4,500,500)}
+    @jugadores={1=>Player.new(1,0,0),2=>Player.new(2,550,0),3=>Player.new(3,0,500),4=>Player.new(4,500,500)}
     @numConnections=0
     @game=nil
     run
@@ -78,11 +78,10 @@ class Server
       client.puts("KD")
     end 
     msg=msg.split
-    if(msg[0]=="XP")
-      client.puts("#{msg[0]} #{msg[1]} #{@jugadores[Integer(msg[1])].x}")
-    elsif (msg[0]=="YP")
-      client.puts("#{msg[0]} #{msg[1]} #{@jugadores[Integer(msg[1])].y}")
-    else
+    if(msg[0]=="PJ")
+      client.puts("#{msg[0]} #{msg[1]} #{@jugadores[Integer(msg[1])].x} #{@jugadores[Integer(msg[1])].y}")
+    elsif(msg[0]=="ROW")
+      client.puts("#{msg[0]} #{msg[1]} #{@game.getRow(Integer(msg[1]))}")
     end
       
   }
