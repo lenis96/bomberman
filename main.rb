@@ -8,6 +8,8 @@ class Client
     @request = nil
     @response = nil
     listen
+    @host="192.168.250.235"
+    @port=3000
     @jugadores={1=>[0,0],2=>[0,0]}
     #send
     @server.puts( "ENTER PLAYER" )
@@ -25,13 +27,17 @@ class Client
     @response = Thread.new do
       loop {
         msg = @server.gets.chomp
-        #puts "#{msg}"
         msg=msg.split
-        if(msg[0]=="PJ") then
+        if( msg[0]=="PLAYER")
+          @numPlayer=msg[1]
+          #puts "#{@numPlayer}"
+        elsif(msg[0]=="PJ") then
           @jugadores[Integer(msg[1])][0]=Integer(msg[2])
           @jugadores[Integer(msg[1])][1]=Integer(msg[3])
         elsif(msg[0]=="ROW") then
           @mapa[Integer(msg[1])]=msg[2]
+        else
+          #puts "< #{msg}"
         end
       }
     end
@@ -45,11 +51,25 @@ class Client
       #loop {
         #print ">>>"
         #msg = $stdin.gets.chomp
-        @server.puts( msg )
+        #E
+        begin
+          @server.puts( msg )
+        rescue Exception => e
+          self.reconectar()
+        end
         #return @server.gets.chomp
         
       #}
     #end
+  end
+  def reconectar()
+    begin
+      sleep(0.1)
+      @server=TCPSocket.open( @host, @port )
+      @server.puts("RECONNECT #{@numPlayer}")
+      #puts("lol #{@numPlayer}")
+    rescue Exception => e
+    end
   end
 end
 class GameWindow < Gosu::Window

@@ -14,13 +14,12 @@ class Game
 		[0,0,0,0,0,0,0,0,0,0,0,0,0],
 		[0,1,0,1,0,1,0,1,0,1,0,1,0],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0]]
-		puts "funciona"
 	end
 	def setPlayer(num,pl)
 		@players[num]=pl
 	end
 	def update()
-		puts "lol"
+		#puts "lol"
 		@players.each do|key,value|
 			dir=value.nextMove()
 			x=value.x()

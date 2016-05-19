@@ -40,9 +40,17 @@ class Server
           if(@numConnections==1) then
             jugar()
           end
+            
           escuchar(@numConnections,client)
         end
         #listen_user_messages( nick_name, client )
+        msg=msg.split
+        if (msg[0]=="RECONNECT")
+          @connections[:clients][Integer(msg[1])] = client
+          client.puts "RECONNECT #{msg[1]}"
+          puts("RECONNECT #{msg[1]}")
+          escuchar(Integer(msg[1]),client)
+        end
           
         #end
       end
