@@ -3,6 +3,8 @@ class Player
     @num=num
     @x=x
     @y=y
+    @movX=0
+    @movY=0
     @nextMove=""
   end
   def moveLeft()
@@ -22,11 +24,20 @@ class Player
   def nextMove=(nextMove)
     @nextMove=nextMove
   end
+  def nextMove()
+    return @nextMove
+  end
   def x()
     return @x
   end
   def y()
     return @y
+  end
+  def movX=(x)
+    @movX=x
+  end
+  def movY=(y)
+    @movY=y
   end
   def update()
     if(@nextMove=="L") then
