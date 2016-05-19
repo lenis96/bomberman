@@ -61,9 +61,14 @@ class GameWindow < Gosu::Window
     for i in 0..12
       @muros<<[]
       for j in 0..12
-        @muros[i]<<Gosu::Image.new(self,"muro.png",false)
+        if(i%2==1 and j%2==1)
+          @muros[i]<<Gosu::Image.new(self,"muro.png",false)
+        else
+          @muros[i]<<Gosu::Image.new(self,"muro2.png",false)
+        end
       end
     end
+    #puts("#{@muros}")
 		server = TCPSocket.open( "192.168.250.235", 3000 )
 		@con=Client.new( server )
     @inicioX=0
@@ -92,6 +97,7 @@ class GameWindow < Gosu::Window
     #@con.send("PJ 2")
     #@con.send("YP 1")
     pos=@con.pos(1)
+    #puts("#{pos}")
     @sprite1.draw(pos[0],pos[1],0)#,scale_x=0.5,scale_y=0.5)
     pos=@con.pos(2)
     @sprite2.draw(pos[0],pos[1],0)#,scale_x=0.5,scale_y=0.5)
@@ -100,11 +106,11 @@ class GameWindow < Gosu::Window
       l=@con.row(i)
       if(l!="")
       end
-      for j in 0..l.length
-        if(l[j]=="1")
-          @muros[1][Integer(j)].draw(@inicioX+(j*50),@inicioY+(i*50),0)
+      for j in 0..l.length-1
+        if(l[j]=="1" or l[j]=="2")
+          @muros[i][Integer(j)].draw(@inicioX+(j*50),@inicioY+(i*50),0)
         else
-          #@muros[1][Integer(j)].draw(-100,50,0)
+          @muros[i][Integer(j)].draw(-100,50,0)
         end
       end
     end
