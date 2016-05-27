@@ -69,8 +69,8 @@ class GameWindow < Gosu::Window
 	        	end
 	      	end
 	    end
-		@client=Client.new("192.168.0.101",3000)
-		@jugadores={1=>[0,0],2=>[0,0]}
+		@client=Client.new("192.168.250.245",3000)
+		@jugadores={1=>[0,0],2=>[0,0],3=>[0,0],4=>[0,0]}
 		@mapa=["","","","","","","","","","","","",""]
 		@inicioX=0
 		@inicioY=0
@@ -101,14 +101,18 @@ class GameWindow < Gosu::Window
 	    end
 	end
 	def draw
-		for i in 1..4
-			msg=@client.send("PJ "+i.to_s)
-			if(msg!="ERROR")
-				@jugadores[@client.getDato(msg,1).to_i]=[@client.getDato(msg,2).to_i,@client.getDato(msg,3).to_i]
-				@spritesJugadores[i-1].draw(@jugadores[i][0],@jugadores[i][1],0)			
+		msg=@client.send("PJS")
+		if(msg!="ERROR")
+			msg=msg.split
+			for i in 1..4
+				@jugadores[i]=[msg[(i*2)-1].to_i,msg[i*2].to_i]
 			end
 		end
-		if(@contador==1)
+		for i in 1..4
+			#@jugadores[@client.getDato(msg,1).to_i]=[@client.getDato(msg,2).to_i,@client.getDato(msg,3).to_i]
+			@spritesJugadores[i-1].draw(@jugadores[i][0],@jugadores[i][1],0)			
+		end
+		if(@contador==24)
 			@contador=0
 		end
 		if(@contador==0)
@@ -132,7 +136,7 @@ class GameWindow < Gosu::Window
 			end
 		end
     	@contador+=1
-        #puts("#{Gosu::fps}")
+        puts("#{Gosu::fps}")
 	end
 end
 game_window=GameWindow.new()

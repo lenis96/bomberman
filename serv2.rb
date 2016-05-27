@@ -56,7 +56,13 @@ class Server
                 r+=" "+@game.getRow(i)
             end
     		return r
-    	end
+        elsif (msgs[0]=="PJS")
+            r="PJS"
+            for i in 1..4
+                r+=" #{@jugadores[i].x} #{@jugadores[i].y}"
+            end
+            return r
+        end
 
     	return msg
     end
