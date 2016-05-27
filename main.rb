@@ -89,7 +89,7 @@ class GameWindow < Gosu::Window
       end
     end
     #puts("#{@muros}")
-		server = TCPSocket.open( "192.168.250.235", 3000 )
+		server = TCPSocket.open( "192.168.250.245", 3000 )
 		@con=Client.new( server )
     @inicioX=0
     @inicioY=0
