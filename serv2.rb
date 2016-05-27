@@ -7,7 +7,7 @@ class Server
 		@host=ip
 		@port=port
     	puts "Servidor corriendo en #{ip} en el puerto #{port}"
-		@jugadores={1=>Player.new(1,0,0),2=>Player.new(2,550,0),3=>Player.new(3,0,500),4=>Player.new(4,500,500)}
+		@jugadores={1=>Player.new(1,0,0),2=>Player.new(2,610,0),3=>Player.new(3,0,610),4=>Player.new(4,610,610)}
     	@numJugadores=0
     	@game=Game.new()
     	listen()
@@ -50,7 +50,14 @@ class Server
     		return "PJ #{msgs[1]} #{@jugadores[msgs[1].to_i].x} #{@jugadores[msgs[1].to_i].y}"
     	elsif(msgs[0]=="ROW")
     		return "ROW #{msgs[1]} #{@game.getRow(msgs[1].to_i)}"
+    	elsif (msgs[0]=="MAP")
+            r="MAP"
+            for i in 0..12
+                r+=" "+@game.getRow(i)
+            end
+    		return r
     	end
+
     	return msg
     end
     def jugar()

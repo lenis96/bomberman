@@ -13,13 +13,19 @@ class Player
     end
   end
   def moveRight()
-    @x+=10
+    if(@x<=600)
+      @x+=10
+    end
   end
   def moveUp()
-    @y-=10
+    if(@y>=10)
+      @y-=10
+    end
   end
   def moveDown()
-    @y+=10
+    if(@y<=600)
+      @y+=10
+    end
   end
   def nextMove=(nextMove)
     @nextMove=nextMove

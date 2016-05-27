@@ -4,7 +4,7 @@ class Game
 		@mapa=[[0,0,0,0,0,0,0,0,0,0,0,0,0],
 		[0,1,0,1,0,1,0,1,0,1,0,1,0],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,1,0,1,0,1,0,1,0,1,0,1,0],
+		[0,1,0,1,0,1,0,1,0,1,0,1,2],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0],
 		[0,1,0,1,0,1,0,1,0,1,0,1,0],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -30,7 +30,7 @@ class Game
 				value.nextMove=""
 			elsif(dir=="U" and (@mapa[(y-10)/50][x/50]!=0 or @mapa[(y-10)/50][(x+39)/50]!=0))
 				value.nextMove=""
-			elsif(dir=="D" and (@mapa[(y+40)/50][x/50]!=0 or @mapa[(y+40)/50][(x+39)/50]!=0))
+			elsif(dir=="D" and (y<610 and (@mapa[(y+40)/50][x/50]!=0 or @mapa[(y+40)/50][(x+39)/50]!=0)))
 				value.nextMove=""
 			end
 			value.update()
@@ -40,6 +40,15 @@ class Game
 		r=""
 		for i in @mapa[row]
 			r+=i.to_s
+		end
+		return r
+	end
+	def getMap()
+		r=""
+		for i in 0..12
+			for j in @mapa[i]
+				r+=i.to_s
+			end
 		end
 		return r
 	end

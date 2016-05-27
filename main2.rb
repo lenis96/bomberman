@@ -25,17 +25,17 @@ class Client
 	end
 	def send(messege)
 		r=""
-		Timeout::timeout(0.1) do
+		Timeout::timeout(0.05) do
 			begin
 				@socket=TCPSocket.new(@host,@port)
 				@socket.puts(messege)
-				begin
+				begin#ojo
 					while line=@socket.gets
 						r+= line
 					end
-				rescue Exception => e
+				rescue Exception => e#ojo
 					return "ERROR"
-				end
+				end#ojo
 				
 
 				@socket.close
@@ -51,11 +51,13 @@ class Client
 end
 class GameWindow < Gosu::Window
 	def initialize()
-		super(800,600,false)
+		super(800,700,false)
 		#@sprite1=Gosu::Image.new(self,"jugador1.png",false)
     	#@sprite2=Gosu::Image.new(self,"jugador2.png",false)
     	@spritesJugadores=[Gosu::Image.new(self,"jugador1.png",false)]
     	@spritesJugadores<<Gosu::Image.new(self,"jugador2.png",false)
+    	@spritesJugadores<<Gosu::Image.new(self,"jugador3.png",false)
+    	@spritesJugadores<<Gosu::Image.new(self,"jugador4.png",false)
 	    @muros=[]
 	    for i in 0..12
 			@muros<<[]
@@ -67,12 +69,13 @@ class GameWindow < Gosu::Window
 	        	end
 	      	end
 	    end
-		@client=Client.new("192.168.250.245",3000)
+		@client=Client.new("192.168.0.101",3000)
 		@jugadores={1=>[0,0],2=>[0,0]}
 		@mapa=["","","","","","","","","","","","",""]
 		@inicioX=0
 		@inicioY=0
 		@contador=0
+		@pressedSpaceBar=false
 	end
 	def update
 		if Gosu::button_down? Gosu::KbLeft then
@@ -87,26 +90,36 @@ class GameWindow < Gosu::Window
 	    if Gosu::button_down? Gosu::KbDown then
 	      	@client.send("KD #{@client.getNumJugador}")
 	    end
+	    if Gosu::button_down? Gosu::KbSpace and not @pressedSpaceBar
+	    	@client.send("KS #{@client.getNumJugador}")
+	    	@pressedSpaceBar=true
+	    	puts "BOOOOOOOOM"
+	    end
+	   	    if not Gosu::button_down? Gosu::KbSpace
+	    	@client.send("KS #{@client.getNumJugador}")
+	    	@pressedSpaceBar=false
+	    end
 	end
 	def draw
-		for i in 1..2
+		for i in 1..4
 			msg=@client.send("PJ "+i.to_s)
 			if(msg!="ERROR")
 				@jugadores[@client.getDato(msg,1).to_i]=[@client.getDato(msg,2).to_i,@client.getDato(msg,3).to_i]
-				@spritesJugadores[i-1].draw(@jugadores[i][0],@jugadores[i][1],0)
+				@spritesJugadores[i-1].draw(@jugadores[i][0],@jugadores[i][1],0)			
 			end
 		end
-		if(@contador==8)
+		if(@contador==1)
 			@contador=0
 		end
 		if(@contador==0)
-			for i in 0..12
-				msg=@client.send("ROW "+i.to_s)
-				if(msg!="ERROR")
-					l=@client.getDato(msg,2)
-					@mapa[i]=l
-	        	end
-	        end
+
+			msg=@client.send("MAP")
+			if(msg!="ERROR")
+				msg=msg.split
+				for i in 0..12
+					@mapa[i]=msg[i+1]
+				end				
+        	end
     	end
     	for i in 0..12
     		l=@mapa[i]
@@ -119,7 +132,7 @@ class GameWindow < Gosu::Window
 			end
 		end
     	@contador+=1
-        puts("#{Gosu::fps}")
+        #puts("#{Gosu::fps}")
 	end
 end
 game_window=GameWindow.new()
