@@ -14,6 +14,8 @@ class Game
 		[0,0,0,0,0,0,0,0,0,0,0,0,0],
 		[0,1,0,1,0,1,0,1,0,1,0,1,0],
 		[0,0,0,0,0,0,0,0,0,0,0,0,0]]
+		@time=120*20
+		@played=true
 	end
 	def setPlayer(num,pl)
 		@players[num]=pl
@@ -35,6 +37,8 @@ class Game
 			end
 			value.update()
 		end
+		timeLess()
+		puts("#{time}")
 	end
 	def getRow(row)
 		r=""
@@ -50,6 +54,21 @@ class Game
 				r+=i.to_s
 			end
 		end
+		return r
+	end
+	def timeLess()
+		if(@played)
+			@time-=1
+		end
+		if(@time==0)
+			@played=false
+		end
+	end
+	def time()
+		r=""
+		r+=(@time/1200).to_s
+		r+=":"
+		r+=((@time/20)%60).to_s
 		return r
 	end
 end

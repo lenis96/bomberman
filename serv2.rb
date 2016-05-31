@@ -62,6 +62,17 @@ class Server
                 r+=" #{@jugadores[i].x} #{@jugadores[i].y}"
             end
             return r
+        elsif (msgs[0]=="ESTADO")
+            if(@numJugadores==4)
+                return "JUGANDO"
+            else
+                r="espereando jugaroes"
+                for i in (@numJugadores+1)..4
+                    r+=" "+i.to_s
+                end
+            end
+            r+="\n"+@game.time()
+            return r
         end
 
     	return msg

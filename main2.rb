@@ -58,6 +58,10 @@ class GameWindow < Gosu::Window
     	@spritesJugadores<<Gosu::Image.new(self,"jugador2.png",false)
     	@spritesJugadores<<Gosu::Image.new(self,"jugador3.png",false)
     	@spritesJugadores<<Gosu::Image.new(self,"jugador4.png",false)
+    	@estadoFont=Gosu::Font.new(20)
+    	@timeFont=Gosu::Font.new(20)
+    	@estado="Conectando"
+    	@time="2:00"
 	    @muros=[]
 	    for i in 0..12
 			@muros<<[]
@@ -69,7 +73,7 @@ class GameWindow < Gosu::Window
 	        	end
 	      	end
 	    end
-		@client=Client.new("192.168.250.245",3000)
+		@client=Client.new("172.17.5.98",3000)
 		@jugadores={1=>[0,0],2=>[0,0],3=>[0,0],4=>[0,0]}
 		@mapa=["","","","","","","","","","","","",""]
 		@inicioX=0
@@ -112,7 +116,7 @@ class GameWindow < Gosu::Window
 			#@jugadores[@client.getDato(msg,1).to_i]=[@client.getDato(msg,2).to_i,@client.getDato(msg,3).to_i]
 			@spritesJugadores[i-1].draw(@jugadores[i][0],@jugadores[i][1],0)			
 		end
-		if(@contador==24)
+		if(@contador==8)
 			@contador=0
 		end
 		if(@contador==0)
@@ -123,6 +127,14 @@ class GameWindow < Gosu::Window
 				for i in 0..12
 					@mapa[i]=msg[i+1]
 				end				
+        	end
+        	msg=@client.send("ESTADO")
+        	if(msg!="ERROR")
+        		msg=msg.split(/\n/)
+        		@estado=msg[0]
+        		@time=msg[1]
+        	else
+        		@estado="INTENTANDO RECONECTAR"
         	end
     	end
     	for i in 0..12
@@ -135,8 +147,10 @@ class GameWindow < Gosu::Window
 		        end
 			end
 		end
-    	@contador+=1
+    	@estadoFont.draw(@estado,10,660,0,1.0,1.0,0xff_ffffff)
+    	@timeFont.draw(@time,700,10,0,1.0,1.0,0xff_ffffff)
         puts("#{Gosu::fps}")
+    	@contador+=1
 	end
 end
 game_window=GameWindow.new()
