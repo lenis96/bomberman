@@ -6,8 +6,9 @@ class Player
     @movX=0
     @movY=0
     @nextMove=""
-    @bombas=10
+    @bombas=1
     @poder=3
+    @vida=3
   end
   def moveLeft()
     if(@x>=10) then
@@ -78,5 +79,15 @@ class Player
   end
   def getColumn()
     return @x/50
+  end
+  def quitarVida()
+    @vida-=1
+    if(vida==0)
+      @x=-100
+      @y=-100
+    end
+  end
+  def vida()
+    return @vida
   end
 end

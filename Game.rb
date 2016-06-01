@@ -23,7 +23,7 @@ class Game
 		@players[num]=pl
 	end
 	def update()
-		#puts "lol"
+		puts("#{@players[1].vida} #{@players[2].vida} #{@players[3].vida} #{@players[4].vida} ")
 		@players.each do|key,value|
 			dir=value.nextMove()
 			x=value.x()
@@ -73,6 +73,7 @@ class Game
 					end
 
 					@players[value[0]].addBomba()
+					quitarVida()
 
 					#agrgar explosion
 				end
@@ -126,5 +127,21 @@ class Game
 	def addBomba(jugador,r,c,t,p)
 		@mapa[r][c]=3
 		@bombas<<[jugador,r,c,t,p]
+	end
+	def quitarVida()
+		#puts("lol")
+		@players.each do|key,value|
+			x=value.x()
+			y=value.y()
+			dx=x+39
+			dy=y+39
+			puts("lol-1")
+			if(@mapa[y/50][x/50]==4 or @mapa[dy/50][x/50]==4 or @mapa[y/50][dx/50]==4 or @mapa[dy/50][dx/50]==4)
+				puts("lal")
+				value.quitarVida()
+			end
+			puts("lol")
+		end
+		puts "paso aqui"
 	end
 end
