@@ -79,7 +79,7 @@ class GameWindow < Gosu::Window
 	      	end
 	    end
 =end
-		@client=Client.new("172.17.3.223",3000)
+		@client=Client.new("192.168.250.245",3000)
 		@jugadores={1=>[0,0],2=>[0,0],3=>[0,0],4=>[0,0]}
 		@mapa=["","","","","","","","","","","","",""]
 		@inicioX=0

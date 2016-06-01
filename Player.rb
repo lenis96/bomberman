@@ -6,7 +6,7 @@ class Player
     @movX=0
     @movY=0
     @nextMove=""
-    @bombas=1
+    @bombas=10
     @poder=3
   end
   def moveLeft()
@@ -72,5 +72,11 @@ class Player
   end
   def poderBomba()
     return @poder
+  end
+  def getRow()
+    return @y/50
+  end
+  def getColumn()
+    return @x/50
   end
 end
