@@ -71,14 +71,17 @@ class Player
   def addBomba()
     @bombas+=1
   end
+  def addPoder()
+    @poder+=1
+  end
   def poderBomba()
     return @poder
   end
   def getRow()
-    return @y/50
+    return (@y+20)/50
   end
   def getColumn()
-    return @x/50
+    return (@x+20)/50
   end
   def quitarVida()
     @vida-=1
