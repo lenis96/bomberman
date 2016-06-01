@@ -62,6 +62,11 @@ class GameWindow < Gosu::Window
     	@timeFont=Gosu::Font.new(20)
     	@estado="Conectando"
     	@time="2:00"
+    	@muro1=Gosu::Image.new(self,"muro.png",false)
+    	@muro2=Gosu::Image.new(self,"muro2.png",false)
+    	@bomba=Gosu::Image.new(self,"bomba.png",false)
+    	@explosion=Gosu::Image.new(self,"explosion.png",false)
+=begin
 	    @muros=[]
 	    for i in 0..12
 			@muros<<[]
@@ -73,7 +78,8 @@ class GameWindow < Gosu::Window
 	        	end
 	      	end
 	    end
-		@client=Client.new("172.17.5.98",3000)
+=end
+		@client=Client.new("172.17.3.223",3000)
 		@jugadores={1=>[0,0],2=>[0,0],3=>[0,0],4=>[0,0]}
 		@mapa=["","","","","","","","","","","","",""]
 		@inicioX=0
@@ -100,7 +106,7 @@ class GameWindow < Gosu::Window
 	    	puts "BOOOOOOOOM"
 	    end
 	   	    if not Gosu::button_down? Gosu::KbSpace
-	    	@client.send("KS #{@client.getNumJugador}")
+	    	#@client.send("KS #{@client.getNumJugador}")
 	    	@pressedSpaceBar=false
 	    end
 	end
@@ -114,7 +120,7 @@ class GameWindow < Gosu::Window
 		end
 		for i in 1..4
 			#@jugadores[@client.getDato(msg,1).to_i]=[@client.getDato(msg,2).to_i,@client.getDato(msg,3).to_i]
-			@spritesJugadores[i-1].draw(@jugadores[i][0],@jugadores[i][1],0)			
+			@spritesJugadores[i-1].draw(@jugadores[i][0],@jugadores[i][1],0)	
 		end
 		if(@contador==8)
 			@contador=0
@@ -140,8 +146,14 @@ class GameWindow < Gosu::Window
     	for i in 0..12
     		l=@mapa[i]
 	    	for j in 0..l.length-1
-				if(l[j]=="1" or l[j]=="2")
-		         	@muros[i][Integer(j)].draw(@inicioX+(j*50),@inicioY+(i*50),0)
+				if(l[j]=="1")
+		         	@muro1.draw(@inicioX+(j*50),@inicioY+(i*50),0)
+		        elsif(l[j]=="2")
+		        	@muro2.draw(@inicioX+(j*50),@inicioY+(i*50),0)
+		        elsif(l[j]=="3")
+		        	@bomba.draw(@inicioX+(j*50),@inicioY+(i*50),0)
+		        elsif(l[j]=="4")
+		        	@explosion.draw(@inicioX+(j*50),@inicioY+(i*50),0)
 		        else
 		         	#@muros[i][Integer(j)].draw(-100,50,0)
 		        end

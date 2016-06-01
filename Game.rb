@@ -16,6 +16,8 @@ class Game
 		[0,0,0,0,0,0,0,0,0,0,0,0,0]]
 		@time=120*20
 		@played=true
+		@bombas=[]
+		@explosiones=[]
 	end
 	def setPlayer(num,pl)
 		@players[num]=pl
@@ -37,8 +39,58 @@ class Game
 			end
 			value.update()
 		end
+		@bombas.delete_if do|value|
+			if(value[3]==0)
+				true
+			else
+				value[3]-=1
+				if(value[3]==0)
+					@mapa[value[1]][value[2]]=4
+					@explosiones<<[value[1],value[2],20]
+					i=1
+					while(i<value[4] and value[1]+i<13 and @mapa[value[1]+i][value[2]]!=1)
+						@mapa[value[1]+i][value[2]]=4
+						@explosiones<<[value[1]+i,value[2],20]
+						i+=1
+					end
+					i=1
+					while(i<value[4] and value[1]-i>-1 and @mapa[value[1]-i][value[2]]!=1)
+						@mapa[value[1]-i][value[2]]=4
+						@explosiones<<[value[1]-i,value[2],20]
+						i+=1
+					end
+					i=1
+					while(i<value[4] and value[2]+i<13 and @mapa[value[1]][value[2]+i]!=1)
+						@mapa[value[1]][value[2]+i]=4
+						@explosiones<<[value[1],value[2]+i,20]
+						i+=1
+					end
+					i=1
+					while(i<value[4] and value[2]-i>-1 and @mapa[value[1]][value[2]-i]!=1)
+						@mapa[value[1]][value[2]-i]=4
+						@explosiones<<[value[1],value[2]-i,20]
+						i+=1
+					end
+
+					@players[value[0]].addBomba()
+
+					#agrgar explosion
+				end
+				false
+			end
+			#completar logica para el control de bombas
+		end
+		@explosiones.delete_if do|v|
+			if(v[2]==0)
+				true
+				@mapa[v[0]][v[1]]=0
+			else
+				v[2]-=1
+				false
+			end
+		end
 		timeLess()
-		puts("#{time}")
+		
 	end
 	def getRow(row)
 		r=""
@@ -70,5 +122,9 @@ class Game
 		r+=":"
 		r+=((@time/20)%60).to_s
 		return r
+	end
+	def addBomba(jugador,r,c,t,p)
+		@mapa[r][c]=3
+		@bombas<<[jugador,r,c,t,p]
 	end
 end

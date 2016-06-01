@@ -6,6 +6,8 @@ class Player
     @movX=0
     @movY=0
     @nextMove=""
+    @bombas=1
+    @poder=3
   end
   def moveLeft()
     if(@x>=10) then
@@ -56,5 +58,19 @@ class Player
       moveDown()
     end
     @nextMove=""
+  end
+  def putBomba()
+    if(@bombas>0)
+      @bombas-=1
+      return true
+    end
+    return false
+
+  end
+  def addBomba()
+    @bombas+=1
+  end
+  def poderBomba()
+    return @poder
   end
 end

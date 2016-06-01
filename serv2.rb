@@ -46,6 +46,10 @@ class Server
  			@jugadores[msgs[1].to_i].nextMove="U"
  		elsif (msgs[0]=="KD")
  			@jugadores[msgs[1].to_i].nextMove="D"
+        elsif(msgs[0]=="KS")
+            if(@jugadores[msgs[1].to_i].putBomba())
+                @game.addBomba(msgs[1].to_i,2,11,60,@jugadores[msgs[1].to_i].poderBomba())
+            end
     	elsif (msgs[0]=="PJ")
     		return "PJ #{msgs[1]} #{@jugadores[msgs[1].to_i].x} #{@jugadores[msgs[1].to_i].y}"
     	elsif(msgs[0]=="ROW")
