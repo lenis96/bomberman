@@ -27,19 +27,21 @@ class Game
 		l=[1,2]
 		puts("#{@players[1].vida} #{@players[2].vida} #{@players[3].vida} #{@players[4].vida} ")
 		@players.each do|key,value|
-			dir=value.nextMove()
-			x=value.x()
-			y=value.y()
-			if(dir=="R" and (l.include? @mapa[y/50][(x+40)/50] or l.include? @mapa[(y+39)/50][(x+40)/50]))
-				value.nextMove=""
-			elsif (dir=="L" and (l.include? @mapa[y/50][(x-10)/50] or l.include? @mapa[(y+39)/50][(x-10)/50]))
-				value.nextMove=""
-			elsif(dir=="U" and (@mapa[(y-10)/50][x/50]!=0 or @mapa[(y-10)/50][(x+39)/50]!=0))
-				value.nextMove=""
-			elsif(dir=="D" and (y<610 and (@mapa[(y+40)/50][x/50]!=0 or @mapa[(y+40)/50][(x+39)/50]!=0)))
-				value.nextMove=""
+			if(value.isLive?)
+				dir=value.nextMove()
+				x=value.x()
+				y=value.y()
+				if(dir=="R" and (l.include? @mapa[y/50][(x+40)/50] or l.include? @mapa[(y+39)/50][(x+40)/50]))
+					value.nextMove=""
+				elsif (dir=="L" and (l.include? @mapa[y/50][(x-10)/50] or l.include? @mapa[(y+39)/50][(x-10)/50]))
+					value.nextMove=""
+				elsif(dir=="U" and (l.include? @mapa[(y-10)/50][x/50] or l.include? @mapa[(y-10)/50][(x+39)/50]))
+					value.nextMove=""
+				elsif(dir=="D" and (y<610 and (l.include? @mapa[(y+40)/50][x/50] or l.include? @mapa[(y+40)/50][(x+39)/50])))
+					value.nextMove=""
+				end
+				value.update()	
 			end
-			value.update()
 		end
 		@bombas.delete_if do|value|
 			if(value[3]==0)

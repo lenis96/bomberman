@@ -93,4 +93,7 @@ class Player
   def vida()
     return @vida
   end
+  def isLive?()
+    return (@vida>0)
+  end
 end

@@ -47,7 +47,7 @@ class Server
  		elsif (msgs[0]=="KD")
  			@jugadores[msgs[1].to_i].nextMove="D"
         elsif(msgs[0]=="KS")
-            if(@jugadores[msgs[1].to_i].putBomba())
+            if(@jugadores[msgs[1].to_i].isLive? and @jugadores[msgs[1].to_i].putBomba())
                 @game.addBomba(msgs[1].to_i,@jugadores[msgs[1].to_i].getRow(),@jugadores[msgs[1].to_i].getColumn(),60,@jugadores[msgs[1].to_i].poderBomba())
             end
     	elsif (msgs[0]=="PJ")
@@ -70,7 +70,7 @@ class Server
             if(@numJugadores==4)
                 return "JUGANDO"
             else
-                r="espereando jugaroes"
+                r="espereando jugadores"
                 for i in (@numJugadores+1)..4
                     r+=" "+i.to_s
                 end
