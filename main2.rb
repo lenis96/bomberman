@@ -124,7 +124,7 @@ class GameWindow < Gosu::Window
 			#@jugadores[@client.getDato(msg,1).to_i]=[@client.getDato(msg,2).to_i,@client.getDato(msg,3).to_i]
 			@spritesJugadores[i-1].draw(@jugadores[i][0],@jugadores[i][1],0)	
 		end
-		if(@contador==24)
+		if(@contador==10)
 			@contador=0
 		end
 		if(@contador==0)

@@ -1,118 +1,120 @@
 class Game
 	def initialize()
 		@players={1=>nil,2=>nil,3=>nil,4=>nil}
-		@mapa=[[0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,1,0,1,0,1,2,1,0,1,0,1,0],
-		[0,0,0,0,0,0,2,2,0,0,0,0,0],
+		@mapa=[[0,2,0,2,2,2,2,0,2,2,0,0,0],
+		[0,1,2,1,2,1,2,1,0,1,0,1,0],
+		[0,0,0,0,0,0,2,2,0,2,0,0,0],
 		[0,1,0,1,0,1,2,1,0,1,0,1,2],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,1,0,1,0,1,0,1,0,1,0,1,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,1,0,1,0,1,0,1,0,1,0,1,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,1,0,1,0,1,0,1,0,1,0,1,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0],
-		[0,1,0,1,0,1,0,1,0,1,0,1,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0]]
+		[0,0,0,0,0,2,2,2,0,0,0,0,0],
+		[0,1,0,1,2,1,0,1,2,1,0,1,0],
+		[0,0,2,0,2,0,2,2,0,0,0,2,0],
+		[0,1,0,1,2,1,0,1,0,1,0,1,0],
+		[0,0,0,2,0,0,0,2,0,0,0,0,0],
+		[0,1,0,1,2,1,0,1,0,1,0,1,0],
+		[0,0,0,0,0,2,0,2,0,0,2,2,0],
+		[0,1,2,1,2,1,0,1,0,1,0,1,0],
+		[0,0,0,0,0,2,2,2,2,2,0,0,0]]
 		@time=120*20
 		@played=true
 		@bombas=[]
 		@explosiones=[]
 		@powerUps={[2,6]=>5,[2,7]=>6}
+		@jugando=true
 	end
 	def setPlayer(num,pl)
 		@players[num]=pl
 	end
 	def update()
-		l=[1,2]
-		puts("#{@players[1].vida} #{@players[2].vida} #{@players[3].vida} #{@players[4].vida} ")
-		@players.each do|key,value|
-			if(value.isLive?)
-				dir=value.nextMove()
-				x=value.x()
-				y=value.y()
-				if(dir=="R" and (l.include? @mapa[y/50][(x+40)/50] or l.include? @mapa[(y+39)/50][(x+40)/50]))
-					value.nextMove=""
-				elsif (dir=="L" and (l.include? @mapa[y/50][(x-10)/50] or l.include? @mapa[(y+39)/50][(x-10)/50]))
-					value.nextMove=""
-				elsif(dir=="U" and (l.include? @mapa[(y-10)/50][x/50] or l.include? @mapa[(y-10)/50][(x+39)/50]))
-					value.nextMove=""
-				elsif(dir=="D" and (y<610 and (l.include? @mapa[(y+40)/50][x/50] or l.include? @mapa[(y+40)/50][(x+39)/50])))
-					value.nextMove=""
+		if(@jugando)
+			l=[1,2,3,4]
+			puts("#{@players[1].vida} #{@players[2].vida} #{@players[3].vida} #{@players[4].vida} ")
+			@players.each do|key,value|
+				if(value.isLive?)
+					dir=value.nextMove()
+					x=value.x()
+					y=value.y()
+					if(dir=="R" and (l.include? @mapa[y/50][(x+40)/50] or l.include? @mapa[(y+39)/50][(x+40)/50]))
+						value.nextMove=""
+					elsif (dir=="L" and (l.include? @mapa[y/50][(x-10)/50] or l.include? @mapa[(y+39)/50][(x-10)/50]))
+						value.nextMove=""
+					elsif(dir=="U" and (l.include? @mapa[(y-10)/50][x/50] or l.include? @mapa[(y-10)/50][(x+39)/50]))
+						value.nextMove=""
+					elsif(dir=="D" and (y<610 and (l.include? @mapa[(y+40)/50][x/50] or l.include? @mapa[(y+40)/50][(x+39)/50])))
+						value.nextMove=""
+					end
+					value.update()	
 				end
-				value.update()	
 			end
-		end
-		@bombas.delete_if do|value|
-			if(value[3]==0)
-				true
-			else
-				value[3]-=1
+			@bombas.delete_if do|value|
 				if(value[3]==0)
-					@mapa[value[1]][value[2]]=4
-					@explosiones<<[value[1],value[2],20]
-					i=1
-					while(i<value[4] and value[1]+i<13 and @mapa[value[1]+i][value[2]]!=1)
-						j=i
-						if(@mapa[value[1]+i][value[2]]==2)
-							i=value[4]
+					true
+				else
+					value[3]-=1
+					if(value[3]==0)
+						@mapa[value[1]][value[2]]=4
+						@explosiones<<[value[1],value[2],20]
+						i=1
+						while(i<value[4] and value[1]+i<13 and @mapa[value[1]+i][value[2]]!=1)
+							j=i
+							if(@mapa[value[1]+i][value[2]]==2)
+								i=value[4]
+							end
+							@mapa[value[1]+j][value[2]]=4
+							@explosiones<<[value[1]+j,value[2],20]
+							i+=1
 						end
-						@mapa[value[1]+j][value[2]]=4
-						@explosiones<<[value[1]+j,value[2],20]
-						i+=1
-					end
-					i=1
-					while(i<value[4] and value[1]-i>-1 and @mapa[value[1]-i][value[2]]!=1)
-						j=i
-						if(@mapa[value[1]-i][value[2]]==2)
-							i=value[4]
+						i=1
+						while(i<value[4] and value[1]-i>-1 and @mapa[value[1]-i][value[2]]!=1)
+							j=i
+							if(@mapa[value[1]-i][value[2]]==2)
+								i=value[4]
+							end
+							@mapa[value[1]-j][value[2]]=4
+							@explosiones<<[value[1]-j,value[2],20]
+							i+=1
 						end
-						@mapa[value[1]-j][value[2]]=4
-						@explosiones<<[value[1]-j,value[2],20]
-						i+=1
-					end
-					i=1
-					while(i<value[4] and value[2]+i<13 and @mapa[value[1]][value[2]+i]!=1)
-						j=i
-						if(@mapa[value[1]][value[2]+i]==2)
-							i=value[4]
+						i=1
+						while(i<value[4] and value[2]+i<13 and @mapa[value[1]][value[2]+i]!=1)
+							j=i
+							if(@mapa[value[1]][value[2]+i]==2)
+								i=value[4]
+							end
+							@mapa[value[1]][value[2]+j]=4
+							@explosiones<<[value[1],value[2]+j,20]
+							i+=1
 						end
-						@mapa[value[1]][value[2]+j]=4
-						@explosiones<<[value[1],value[2]+j,20]
-						i+=1
-					end
-					i=1
-					while(i<value[4] and value[2]-i>-1 and @mapa[value[1]][value[2]-i]!=1)
-						j=i
-						if(@mapa[value[1]][value[2]-i]==2)
-							i=value[4]
+						i=1
+						while(i<value[4] and value[2]-i>-1 and @mapa[value[1]][value[2]-i]!=1)
+							j=i
+							if(@mapa[value[1]][value[2]-i]==2)
+								i=value[4]
+							end
+							@mapa[value[1]][value[2]-j]=4
+							@explosiones<<[value[1],value[2]-j,20]
+							i+=1
 						end
-						@mapa[value[1]][value[2]-j]=4
-						@explosiones<<[value[1],value[2]-j,20]
-						i+=1
-					end
 
-					@players[value[0]].addBomba()
-					quitarVida()
+						@players[value[0]].addBomba()
+						quitarVida()
 
-					#agrgar explosion
+						#agrgar explosion
+					end
+					false
 				end
-				false
+				#completar logica para el control de bombas
 			end
-			#completar logica para el control de bombas
-		end
-		@explosiones.delete_if do|v|
-			if(v[2]==0)
-				true
-				@mapa[v[0]][v[1]]=getPower(v[0],v[1])
-			else
-				v[2]-=1
-				false
+			@explosiones.delete_if do|v|
+				if(v[2]==0)
+					true
+					@mapa[v[0]][v[1]]=getPower(v[0],v[1])
+				else
+					v[2]-=1
+					false
+				end
 			end
+			darPowerUps()
+			timeLess()
 		end
-		darPowerUps()
-		timeLess()
-		
 	end
 	def getRow(row)
 		r=""
@@ -216,5 +218,14 @@ class Game
 		else
 			return r
 		end
+	end
+	def jugando?()
+		return @jugando
+	end
+	def parar()
+		@jugando=false
+	end
+	def reanudar()
+		@jugando=true
 	end
 end

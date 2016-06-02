@@ -68,7 +68,11 @@ class Server
             return r
         elsif (msgs[0]=="ESTADO")
             if(@numJugadores==4)
-                return "JUGANDO"
+                if(@game.jugando?)
+                    return "JUGANDO"
+                else
+                    return "PARADO"
+                end
             else
                 r="espereando jugadores"
                 for i in (@numJugadores+1)..4
@@ -77,8 +81,13 @@ class Server
             end
             r+="\n"+@game.time()
             return r
+        elsif(msgs[0]=="PARAR")
+            @game.parar()
+            puts("juego parado")
+        elsif (msgs[0]=="REANUDAR")
+            @game.reanudar()
+            puts("juego reanudado")
         end
-
     	return msg
     end
     def jugar()
