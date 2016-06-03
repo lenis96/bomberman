@@ -3,8 +3,6 @@ class Player
     @num=num
     @x=x
     @y=y
-    @movX=0
-    @movY=0
     @nextMove=""
     @bombas=1
     @poder=3
