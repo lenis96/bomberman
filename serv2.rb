@@ -27,7 +27,7 @@ class Server
                 client.close()
             rescue Exception => e
             end
-                
+
     	end
     end
     def responder(msg)
@@ -84,7 +84,7 @@ class Server
                     end
                 end
             else
-                r="espereando jugadores"
+                r="esperando jugadores"
                 for i in (@numJugadores+1)..4
                     r+=" "+i.to_s
                 end
