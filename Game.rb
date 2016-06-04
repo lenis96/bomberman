@@ -138,6 +138,8 @@ class Game
 		end
 		if(@time==0)
 			@played=false
+			@jugando=false
+			
 		end
 	end
 	def time()

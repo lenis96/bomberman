@@ -14,14 +14,20 @@ class Server
     end
     def listen
     	loop do
-    		client=@server.accept
-    		msg=client.gets
-    		if(msg!=nil)
-	    		msg=msg.chomp()
-	    		res=responder(msg)
-	    		client.puts(res)
-    		end
-    		client.close()
+            begin
+                
+                
+                client=@server.accept
+                msg=client.gets
+                if(msg!=nil)
+                    msg=msg.chomp()
+                    res=responder(msg)
+                    client.puts(res)
+                end
+                client.close()
+            rescue Exception => e
+            end
+                
     	end
     end
     def responder(msg)
@@ -30,7 +36,7 @@ class Server
     		if(@numJugadores<4)
     		@numJugadores+=1
     		puts("Entro jugardor #{@numJugadores}")
-    		if(@numJugadores==1)
+    		if(@numJugadores==4)
     			puts("comenzo juego")
     			jugar()
     		end
@@ -69,9 +75,13 @@ class Server
         elsif (msgs[0]=="ESTADO")
             if(@numJugadores==4)
                 if(@game.jugando?)
-                    return "JUGANDO"
+                    r="JUGANDO"
                 else
-                    return "PARADO"
+                    if(@game.time=="0:0")
+                        r="JUEGO TERMINADO"
+                    else
+                        r="PARADO"
+                    end
                 end
             else
                 r="espereando jugadores"
